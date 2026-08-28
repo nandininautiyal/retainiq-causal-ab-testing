@@ -1,0 +1,34 @@
+# --- Core data handling ---
+pandas>=2.0.0
+numpy>=1.24.0
+
+# --- Frequentist statistics ---
+scipy>=1.11.0            # z-tests, t-tests, distributions
+statsmodels>=0.14.0       # proportions_ztest, power/sample-size calculators, CIs
+
+# --- Bayesian statistics ---
+# For a Cookie Cats-style binary retention outcome (converted / not converted),
+# the Bernoulli/Binomial-Beta model is CONJUGATE — meaning the posterior has a
+# closed-form solution. You don't need a full probabilistic programming
+# language (PyMC) with MCMC sampling for this specific problem; scipy.stats
+# is enough (this is what we'll use in bayesian_tests.py).
+#
+# We still list pymc + arviz below, commented out, in case you later want to:
+#   - extend to a hierarchical model (e.g. partial pooling across levels/segments)
+#   - model a non-binary outcome (e.g. sum_gamerounds) where conjugacy breaks down
+# Uncomment if/when you need them — they're a heavier install (PyMC pulls in
+# PyTensor and can be slow/fragile to install on some machines).
+# pymc>=5.10.0
+# arviz>=0.17.0
+
+# --- Visualization ---
+matplotlib>=3.7.0
+seaborn>=0.13.0
+plotly>=5.18.0            # optional, for interactive plots in the EDA notebook
+
+# --- Notebook environment ---
+jupyter>=1.0.0
+ipykernel>=6.29.0
+
+# --- Testing (optional but good practice for a portfolio repo) ---
+pytest>=7.4.0
