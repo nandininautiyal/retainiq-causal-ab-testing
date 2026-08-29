@@ -85,13 +85,42 @@ shows up in a subgroup.
 
 ## Results
 
-*(Fill in after running the notebook + modules on the real dataset —
-see below for how.)*
+Run on the full dataset (n=90,189: 44,700 in `gate_30`, 45,489 in `gate_40`).
 
-| Metric | gate_30 | gate_40 | Diff | p-value | P(B>A) |
+| Metric | gate_30 | gate_40 | Diff (B−A) | z-test p-value | Bayesian P(gate_40 > gate_30) |
 |---|---|---|---|---|---|
-| Day-1 retention | — | — | — | — | — |
-| Day-7 retention | — | — | — | — | — |
+| Day-1 retention | 44.82% | 44.23% | −0.59 pp | 0.074 (not significant) | 3.8% |
+| Day-7 retention | 19.02% | 18.20% | −0.82 pp | 0.0016 (significant) | 0.08% |
+
+**Bottom line:** moving the gate from level 30 to level 40 did **not** improve
+retention — if anything, it modestly *hurt* Day-7 retention, and the
+frequentist and Bayesian analyses agree closely on this. Day-1 retention
+shows the same direction of effect but doesn't clear the conventional
+significance threshold on its own. Given this, recommendation would be to
+**keep the gate at level 30** rather than move it to 40.
+
+A methodological side-note: the chi-square balance check in the EDA notebook
+returns p≈0.0086 (i.e. "significant" at α=0.05) for the 44.96%/50.44% split.
+With n=90k, even a sub-1-point deviation from an exact 50/50 split clears
+that bar — this is a known quirk of this specific dataset, not evidence that
+randomization was broken.
+
+### Segment analysis findings
+
+- **By engagement level** (casual/regular/hardcore): the Day-7 effect is
+  concentrated in **regular and hardcore** players (both significant, gate_40
+  worse); the **casual** segment shows no significant difference. This makes
+  intuitive sense — casual players who barely play any rounds are unlikely to
+  be affected by a gate at level 30 *or* 40.
+- **By approximate "reached the gate" status**: this segment shows gate_40
+  *outperforming* gate_30 in both sub-groups — the opposite direction of the
+  overall effect. This is expected and is exactly the post-treatment
+  conditioning bias flagged in `segment_analysis.py`'s docstring: since
+  `sum_gamerounds` is measured after the gate could already have shaped
+  behavior, conditioning on it changes who ends up in each bucket
+  differently for the two arms. **Don't read this segment's numbers as
+  contradicting the overall (more trustworthy) result** — it's a
+  demonstration of why that caveat matters, not a real finding.
 
 ## How to Run
 
@@ -115,4 +144,5 @@ python src\segment_analysis.py
 ## Tech Stack
 
 Python · pandas · NumPy · SciPy · statsmodels · matplotlib/seaborn · Jupyter
+
 
